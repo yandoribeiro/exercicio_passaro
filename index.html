@@ -1,0 +1,114 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
+    <title>Yan de Oliveira Ribeiro</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+<script>
+
+    var config = {
+        type: Phaser.AUTO,
+        width: 800,
+        height: 600,
+
+        scene: {
+            preload: preload,
+            create: create,
+            update: update
+        }
+    };
+
+    var game = new Phaser.Game(config);
+
+    var passarinho;
+
+    function preload() {
+        this.load.image('bg', 'assets/bg_space.png'); // Carrega o background no jogo
+        this.load.spritesheet('passaro', 'assets/bird-red.png', {frameWidth: 75, frameHeight: 75}); // Carrega o spritesheet do passaro
+    }
+
+    function create() {
+        this.add.image(400, 300, 'bg'); // Adiciona o background no jogo
+        passarinho = this.add.sprite(100, 100, 'passaro').setScale(1.3); // Cria a variável passarinho para guardar o pássaro
+
+        this.anims.create({ // Código que permite que o pássaro mude os frames 
+            key: 'fly',
+            frames: this.anims.generateFrameNumbers('passaro', {start: 0, end: 7}),
+            frameRate:10,
+            repeat: -1
+        });
+
+        passarinho.anims.play('fly', true); // Inicia a animação de movimento do pássaro
+
+        passarinho.ida = true; // Cria variável de movimento horizontal do pássaro
+        passarinho.subida = true; // Cria variável de movimento vertical do pássaro
+    }
+
+    function update() {
+
+        // Adiciona um limite de posição horizontal ao pássaro 
+        if (passarinho.x === 100) {
+            passarinho.setFlip(false, false);
+            passarinho.ida = true;
+        } 
+
+        // Cria o movimento do pássaro para a direita 
+        if (passarinho.x < 700 && passarinho.ida === true) {
+            console.log("pássaro começa a ir para a direita");
+            passarinho.x += 5;
+        }
+
+        // Adiciona outro limite de posição horizontal ao pássaro
+        if (passarinho.x === 700) {
+            passarinho.setFlip(true, false);
+            passarinho.ida = false;
+        }
+
+        // Cria o movimento do pássaro para a esquerda
+        if (passarinho.x > 100 && passarinho.ida === false) {
+            console.log("pássaro começa a ir para a esquerda");
+            passarinho.x -= 5;
+        }
+
+        // Adiciona um limite de posição vertical para o pássaro
+        if (passarinho.y === 100) {
+            passarinho.subida = true;
+        }
+
+        // Cria o movimento do pássaro para cima
+        if (passarinho.y < 500 && passarinho.subida === true) {
+            console.log("pássaro começa a subir");
+            passarinho.y += 5;
+        }
+
+        // Adiciona outro limite de posição vertical para o pássaro
+        if (passarinho.y === 500) {
+            passarinho.subida = false;
+        }
+
+        // Cria o movimento do pássaro para baixo 
+        if (passarinho.y > 100 && passarinho.subida === false) {
+            console.log("pássaro começa a descer");
+            passarinho.y -= 5;
+        }
+    }
+
+</script>
+
+</body>
+</html>
+
